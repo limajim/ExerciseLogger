@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D262C9FA-A527-4DF4-9D69-E526B382F528}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExerciseLogger.Tests", "ExerciseLogger.Tests\ExerciseLogger.Tests.csproj", "{BEFCAA17-DA9A-49FB-BF86-009EB3B3F9F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExerciseLoggerApp", "ExerciseLoggerApp\ExerciseLoggerApp.csproj", "{B4C60FCA-7E68-4282-8F77-7AAE1785636F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggingAPI", "LoggingAPI\LoggingAPI.csproj", "{E90C8D2E-A2AC-4275-91F3-4F7C897CE367}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEFCAA17-DA9A-49FB-BF86-009EB3B3F9F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEFCAA17-DA9A-49FB-BF86-009EB3B3F9F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEFCAA17-DA9A-49FB-BF86-009EB3B3F9F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEFCAA17-DA9A-49FB-BF86-009EB3B3F9F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4C60FCA-7E68-4282-8F77-7AAE1785636F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4C60FCA-7E68-4282-8F77-7AAE1785636F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4C60FCA-7E68-4282-8F77-7AAE1785636F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4C60FCA-7E68-4282-8F77-7AAE1785636F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E90C8D2E-A2AC-4275-91F3-4F7C897CE367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E90C8D2E-A2AC-4275-91F3-4F7C897CE367}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E90C8D2E-A2AC-4275-91F3-4F7C897CE367}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E90C8D2E-A2AC-4275-91F3-4F7C897CE367}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
