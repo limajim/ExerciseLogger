@@ -13,6 +13,7 @@ namespace LoggingAPI.Models
         public string ExternalAccessToken { get; set; }
     }
 
+//TODO:  Need to remove these once we are comfortable with 
     public class ChangePasswordBindingModel
     {
         [Required]

@@ -23,6 +23,9 @@ namespace LoggingAPI.Models.Forms
 
         public string CurrentUserId { get; set; }
 
+        public byte[] RowVersion { get; set; }
+
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             return null;

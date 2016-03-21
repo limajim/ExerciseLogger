@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LoggingAPI.Models.Forms;
@@ -53,8 +53,12 @@ namespace LoggingAPI.Models
 
             var result = userManager.Create(this, form.Password);
 
-            var auditLog = new AuditLog{DateEntered = DateTime.Now,UserId=form.CurrentUserId,
-                EventLogInformation="Registered user:"+form.UserName};
+            var auditLog = new AuditLog
+            {
+                DateEntered = DateTime.Now,
+                UserId = form.CurrentUserId,
+                EventLogInformation = "Registered user:" + form.UserName
+            };
 
             return (result);
         }

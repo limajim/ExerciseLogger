@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LoggingAPI.Models
 {
     public class Permission : IdentityRole
     {
+
+        public string Description { get; set; }
+        public string PermissionLevel { get; set; }
+
         public Permission()
         {
         }
@@ -13,7 +18,5 @@ namespace LoggingAPI.Models
             Name = name;
         }
 
-        public string Description { get; set; }
-        public string PermissionLevel { get; set; }
     }
 }

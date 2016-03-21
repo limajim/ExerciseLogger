@@ -34,5 +34,7 @@ namespace LoggingAPI.Models.Forms
         public string ConfirmPassword { get; set; }
 
         public string CurrentUserId { get; set; }
+        public byte[] RowVersion { get; set; }
+
     }
 }
