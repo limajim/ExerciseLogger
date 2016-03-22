@@ -43,7 +43,6 @@ namespace LoggingAPI.Models
                     UserName = form.UserName
                 }, userManager, permissionManager);
 
-            var result = userManager.Create(this, form.Password);
 
             var auditLog = new AuditLog
             {
@@ -59,6 +58,7 @@ namespace LoggingAPI.Models
             FirstName = form.FirstName;
             LastName = form.LastName;
             UserName = form.UserName;
+            Email = form.Email;
 
             var auditLog = new AuditLog
             {

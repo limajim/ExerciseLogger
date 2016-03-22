@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
@@ -17,6 +19,13 @@ namespace LoggingAPI
         public JJUserManager(IUserStore<User> store)
             : base(store)
         {
+        }
+
+        public User FindByUserName(string userName)
+        {
+            return
+                (this.Users.SingleOrDefault(
+                    usr => usr.UserName.Equals(userName, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         public static JJUserManager Create(IdentityFactoryOptions<JJUserManager> options, IOwinContext context)

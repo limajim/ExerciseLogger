@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 using System.Net.Mail;
+using System.Web.UI.WebControls;
 using LoggingAPI.Models;
 using LoggingAPI.Models.Forms;
 using Microsoft.AspNet.Identity;
@@ -47,8 +50,11 @@ namespace LoggingAPI.Gateways
         {
             var user = new User();
             user.UpdateUser(form, _userManager, _permissionManager);
-
-            return _userManager.Create(user, form.Password);
+            IdentityResult result;
+            result = _userManager.Create(user, form.Password);
+            // Audit log to be saved
+            _dbContext.SaveChanges();
+            return result;
         }
 
         public bool DisableUser(string userName)
@@ -63,17 +69,22 @@ namespace LoggingAPI.Gateways
 
         public User GetUserById(string id)
         {
-            throw new NotImplementedException();
+            return _userManager.FindById(id);
         }
 
         public User GetUserByUserName(string userName)
         {
-            throw new NotImplementedException();
+            return _userManager.FindByUserName(userName);
         }
 
         public bool ChangePassword(ChangePasswordForm form)
         {
             throw new NotImplementedException();
+        }
+
+        public IdentityResult DeleteUser(User user)
+        {
+            return (_userManager.Delete(user));
         }
 
     }
