@@ -6,6 +6,11 @@ namespace LoggingAPI.Models.Forms
 {
     public class UserForm : IForm, IValidatableObject
     {
+        public UserForm()
+        {
+            PermissionIds = new List<string>();
+        }
+
         [Required]
         [MinLength(8)]
         [MaxLength(20)]
@@ -24,6 +29,9 @@ namespace LoggingAPI.Models.Forms
         public string CurrentUserId { get; set; }
 
         public byte[] RowVersion { get; set; }
+
+
+        public List<string> PermissionIds { get; set; }
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

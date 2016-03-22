@@ -6,17 +6,16 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OAuth;
+using LoggingAPI.Gateways;
 using LoggingAPI.Models;
 using LoggingAPI.Models.Forms;
 using LoggingAPI.Providers;
 using LoggingAPI.Results;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OAuth;
 
 namespace LoggingAPI.Controllers
 {
@@ -31,6 +30,7 @@ namespace LoggingAPI.Controllers
         {
         }
 
+        // TODO:  Wont need these.  Will be done in the gateway
         public AccountController(JJUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
@@ -40,14 +40,8 @@ namespace LoggingAPI.Controllers
 
         public JJUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<JJUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get { return _userManager ?? Request.GetOwinContext().GetUserManager<JJUserManager>(); }
+            private set { _userManager = value; }
         }
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
@@ -57,7 +51,7 @@ namespace LoggingAPI.Controllers
         [Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
             return new UserInfoViewModel
             {
@@ -79,16 +73,16 @@ namespace LoggingAPI.Controllers
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
-            User user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
             if (user == null)
             {
                 return null;
             }
 
-            List<UserLoginInfoViewModel> logins = new List<UserLoginInfoViewModel>();
+            var logins = new List<UserLoginInfoViewModel>();
 
-            foreach (IdentityUserLogin linkedAccount in user.Logins)
+            foreach (var linkedAccount in user.Logins)
             {
                 logins.Add(new UserLoginInfoViewModel
                 {
@@ -102,7 +96,7 @@ namespace LoggingAPI.Controllers
                 logins.Add(new UserLoginInfoViewModel
                 {
                     LoginProvider = LocalLoginProvider,
-                    ProviderKey = user.UserName,
+                    ProviderKey = user.UserName
                 });
             }
 
@@ -124,9 +118,9 @@ namespace LoggingAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -144,7 +138,7 @@ namespace LoggingAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+            var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -165,23 +159,24 @@ namespace LoggingAPI.Controllers
 
             Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
 
-            AuthenticationTicket ticket = AccessTokenFormat.Unprotect(model.ExternalAccessToken);
+            var ticket = AccessTokenFormat.Unprotect(model.ExternalAccessToken);
 
             if (ticket == null || ticket.Identity == null || (ticket.Properties != null
-                && ticket.Properties.ExpiresUtc.HasValue
-                && ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
+                                                              && ticket.Properties.ExpiresUtc.HasValue
+                                                              &&
+                                                              ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
             {
                 return BadRequest("External login failure.");
             }
 
-            ExternalLoginData externalData = ExternalLoginData.FromIdentity(ticket.Identity);
+            var externalData = ExternalLoginData.FromIdentity(ticket.Identity);
 
             if (externalData == null)
             {
                 return BadRequest("The external login is already associated with an account.");
             }
 
-            IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
+            var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
                 new UserLoginInfo(externalData.LoginProvider, externalData.ProviderKey));
 
             if (!result.Succeeded)
@@ -238,7 +233,7 @@ namespace LoggingAPI.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
             if (externalLogin == null)
             {
@@ -251,27 +246,27 @@ namespace LoggingAPI.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-            User user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
+            var user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
                 externalLogin.ProviderKey));
 
-            bool hasRegistered = user != null;
+            var hasRegistered = user != null;
 
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+
+                var oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     OAuthDefaults.AuthenticationType);
-                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                var cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+                var properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
                 Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
             }
             else
             {
                 IEnumerable<Claim> claims = externalLogin.GetClaims();
-                ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
+                var identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
                 Authentication.SignIn(identity);
             }
 
@@ -283,8 +278,8 @@ namespace LoggingAPI.Controllers
         [Route("ExternalLogins")]
         public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
         {
-            IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
-            List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();
+            var descriptions = Authentication.GetExternalAuthenticationTypes();
+            var logins = new List<ExternalLoginViewModel>();
 
             string state;
 
@@ -298,9 +293,9 @@ namespace LoggingAPI.Controllers
                 state = null;
             }
 
-            foreach (AuthenticationDescription description in descriptions)
+            foreach (var description in descriptions)
             {
-                ExternalLoginViewModel login = new ExternalLoginViewModel
+                var login = new ExternalLoginViewModel
                 {
                     Name = description.Caption,
                     Url = Url.Route("ExternalLogin", new
@@ -309,7 +304,7 @@ namespace LoggingAPI.Controllers
                         response_type = "token",
                         client_id = Startup.PublicClientId,
                         redirect_uri = new Uri(Request.RequestUri, returnUrl).AbsoluteUri,
-                        state = state
+                        state
                     }),
                     State = state
                 };
@@ -322,7 +317,7 @@ namespace LoggingAPI.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterForm  form)
+        public async Task<IHttpActionResult> Register(RegisterForm form)
         {
             if (!ModelState.IsValid)
             {
@@ -330,9 +325,8 @@ namespace LoggingAPI.Controllers
             }
 
 
-            var user = new User();
-            var result = user.RegisterUser(form, UserManager);
-
+            var theGateway = new ExerciseLoggerGateway();
+            var result = theGateway.AddUser(form);
 
             if (!result.Succeeded)
             {
@@ -359,9 +353,9 @@ namespace LoggingAPI.Controllers
                 return InternalServerError();
             }
 
-            var user = new User() { UserName = model.Email, Email = model.Email };
+            var user = new User {UserName = model.Email, Email = model.Email};
 
-            IdentityResult result = await UserManager.CreateAsync(user);
+            var result = await UserManager.CreateAsync(user);
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -370,7 +364,7 @@ namespace LoggingAPI.Controllers
             result = await UserManager.AddLoginAsync(user.Id, info.Login);
             if (!result.Succeeded)
             {
-                return GetErrorResult(result); 
+                return GetErrorResult(result);
             }
             return Ok();
         }
@@ -404,7 +398,7 @@ namespace LoggingAPI.Controllers
             {
                 if (result.Errors != null)
                 {
-                    foreach (string error in result.Errors)
+                    foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error);
                     }
@@ -448,10 +442,10 @@ namespace LoggingAPI.Controllers
                     return null;
                 }
 
-                Claim providerKeyClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
+                var providerKeyClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
 
-                if (providerKeyClaim == null || String.IsNullOrEmpty(providerKeyClaim.Issuer)
-                    || String.IsNullOrEmpty(providerKeyClaim.Value))
+                if (providerKeyClaim == null || string.IsNullOrEmpty(providerKeyClaim.Issuer)
+                    || string.IsNullOrEmpty(providerKeyClaim.Value))
                 {
                     return null;
                 }
@@ -472,20 +466,20 @@ namespace LoggingAPI.Controllers
 
         private static class RandomOAuthStateGenerator
         {
-            private static RandomNumberGenerator _random = new RNGCryptoServiceProvider();
+            private static readonly RandomNumberGenerator _random = new RNGCryptoServiceProvider();
 
             public static string Generate(int strengthInBits)
             {
                 const int bitsPerByte = 8;
 
-                if (strengthInBits % bitsPerByte != 0)
+                if (strengthInBits%bitsPerByte != 0)
                 {
                     throw new ArgumentException("strengthInBits must be evenly divisible by 8.", "strengthInBits");
                 }
 
-                int strengthInBytes = strengthInBits / bitsPerByte;
+                var strengthInBytes = strengthInBits/bitsPerByte;
 
-                byte[] data = new byte[strengthInBytes];
+                var data = new byte[strengthInBytes];
                 _random.GetBytes(data);
                 return HttpServerUtility.UrlTokenEncode(data);
             }
