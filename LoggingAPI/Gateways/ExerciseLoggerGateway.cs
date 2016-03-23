@@ -50,9 +50,8 @@ namespace LoggingAPI.Gateways
         {
             var user = new User();
             user.UpdateUser(form, _userManager, _permissionManager);
-            IdentityResult result;
-            result = _userManager.Create(user, form.Password);
-            // Audit log to be saved
+            var result = _userManager.Create(user, form.Password);
+            _dbContext.AuditLogs.AddRange(user.AuditLogsToAdd);
             _dbContext.SaveChanges();
             return result;
         }

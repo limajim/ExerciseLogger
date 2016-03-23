@@ -11,6 +11,9 @@ namespace LoggingAPI.Models.Forms
             PermissionIds = new List<string>();
         }
 
+
+        public string UserId { get; set; }
+
         [Required]
         [MinLength(8)]
         [MaxLength(20)]

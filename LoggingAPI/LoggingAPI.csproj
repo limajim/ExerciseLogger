@@ -209,6 +209,8 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ExerciseSessionAuditLog.cs" />
+    <Compile Include="Models\UserAuditLog.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\ExerciseDbContext.cs" />
     <Compile Include="Models\ExerciseSession.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="Models\Forms\ChangePasswordForm.cs" />
     <Compile Include="Models\Forms\RegisterForm.cs" />
     <Compile Include="Models\Forms\UserForm.cs" />
+    <Compile Include="Models\Interfaces\IEntity.cs" />
     <Compile Include="Models\Interfaces\IForm.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\User.cs" />

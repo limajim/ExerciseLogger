@@ -8,12 +8,12 @@ using System.Web;
 
 namespace LoggingAPI.Models
 {
-    public class AuditLog
+    public abstract class AuditLog
     {
         public int Id { get; set; }
         [Required]
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public string EditedByUserId { get; set; }
         [Required]
         public DateTime DateEntered { set; get; }
         [Required]

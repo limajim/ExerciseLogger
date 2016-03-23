@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
@@ -17,10 +18,11 @@ namespace LoggingAPI.Models
 
 
         [ForeignKey("ExerciseType")]
-        public int ExerciseSessionId { get; set; }
+        public int ExerciseTypeId { get; set; }
 
         public virtual ExerciseType ExerciseType { get; set; }
 
+        public IEnumerable<ExerciseSessionAuditLog> ExerciseSessionAuditLogs { set; get; }
 
     }
 }
