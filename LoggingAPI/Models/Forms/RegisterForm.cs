@@ -33,7 +33,7 @@ namespace LoggingAPI.Models.Forms
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string CurrentUserId { get; set; }
+        public User CurrentUser { get; set; }
         public byte[] RowVersion { get; set; }
 
     }

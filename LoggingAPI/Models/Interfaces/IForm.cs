@@ -10,7 +10,7 @@ namespace LoggingAPI.Models.Interfaces
     public interface IForm
     {
         [Required]
-        string CurrentUserId { set; get; }
+        User CurrentUser { set; get; }
         [Required]
         byte[] RowVersion { get; set; }
     }

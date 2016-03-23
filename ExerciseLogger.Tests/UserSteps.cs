@@ -45,7 +45,7 @@ namespace ExerciseLogger.Tests
             var result = _gateway.AddUser(new RegisterForm
             {
                 // jvandick user for testing purposes
-                CurrentUserId = "5cd6da42-a92a-4641-a427-a3e95fcb3683",
+                CurrentUser = _gateway.GetUserById("5cd6da42-a92a-4641-a427-a3e95fcb3683"),
                 Email = email,
                 FirstName = firstName,
                 LastName = lastName,
@@ -92,7 +92,7 @@ namespace ExerciseLogger.Tests
             var registerForm = new RegisterForm
             {
                 // jvandick user for testing purposes
-                CurrentUserId = "5cd6da42-a92a-4641-a427-a3e95fcb3683",
+                CurrentUser = _gateway.GetUserById("5cd6da42-a92a-4641-a427-a3e95fcb3683"),
                 Email = _user.Email,
                 UserName = _user.UserName,
                 FirstName = _user.FirstName,
@@ -120,6 +120,8 @@ namespace ExerciseLogger.Tests
         {
             // Send out the errors if the result didnt succeed
             var errMsg = _result.Errors.Aggregate("", (current, error) => current + (error + ".  "));
+
+            var user = _gateway.GetUserById("5cd6da42-a92a-4641-a427-a3e95fcb3683");
 
             Assert.IsTrue(_result.Succeeded,
                 "The IdentityResult should be Succeeded=true error( " + errMsg + " )");

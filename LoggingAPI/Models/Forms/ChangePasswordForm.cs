@@ -25,7 +25,7 @@ namespace LoggingAPI.Models.Forms
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string CurrentUserId { get; set; }
+        public User CurrentUser { get; set; }
         public byte[] RowVersion { get; set; }
     }
 }

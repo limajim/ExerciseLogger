@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LoggingAPI.Models.Forms;
-using LoggingAPI.Models.Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -13,22 +11,22 @@ namespace LoggingAPI.Models
 {
     public class User : IdentityUser
     {
+        public User()
+        {
+            AuditLogsToAdd = new List<UserAuditLog>();
+        }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
         public List<UserAuditLog> AuditLogsToAdd { get; set; }
 
-        public virtual List<AuditLog> AuditLogs { get; set; }
+        public virtual IList<UserAuditLog> UpdatedAuditLogs { get; set; }
+        public virtual IList<UserAuditLog> EditedByAuditLogs { get; set; }
 
         public string FullName
         {
             get { return FirstName + " " + LastName; }
-        }
-
-        public User() : base()
-        {
-            AuditLogsToAdd = new List<UserAuditLog>();
-
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)
@@ -44,64 +42,67 @@ namespace LoggingAPI.Models
             UpdateUser(
                 new UserForm
                 {
-                    CurrentUserId = form.CurrentUserId,
+                    CurrentUser = form.CurrentUser,
                     Email = form.Email,
                     FirstName = form.FirstName,
                     LastName = form.LastName,
-                    UserName = form.UserName,
+                    UserName = form.UserName
                 }, userManager, permissionManager);
-
         }
 
         public void UpdateUser(UserForm form, JJUserManager userManager, PermissionManager permissionManager)
         {
-            bool newUser = String.IsNullOrEmpty(FirstName);
+            var newUser = string.IsNullOrEmpty(FirstName);
             if (newUser)
             {
+                
                 AuditLogsToAdd.Add(new UserAuditLog
                 {
                     DateEntered = DateTime.Now,
-                    EditedByUserId = form.CurrentUserId,
-                    EventLogInformation = "Registered user:" + form.UserName,
-                    UserId = form.UserId
-
+                    EditedByUser = form.CurrentUser,
+                    EventLogInformation = "Registered user: " + form.UserName,
+                    UpdatedUserId = form.UserId
                 });
             }
             else
             {
-                if(!FirstName.Equals(form.FirstName, StringComparison.InvariantCultureIgnoreCase) )
+                if (!FirstName.Equals(form.FirstName, StringComparison.InvariantCultureIgnoreCase))
                     AuditLogsToAdd.Add(new UserAuditLog
                     {
                         DateEntered = DateTime.Now,
-                        EditedByUserId = form.CurrentUserId,
-                        EventLogInformation = "Updated First Name from:" + FirstName + " to " + form.FirstName + " for User: " + UserName,
-                        UserId = form.UserId
+                        EditedByUser = form.CurrentUser,
+                        EventLogInformation =
+                            "Updated First Name from:" + FirstName + " to " + form.FirstName + " for User: " + UserName//,
+//                        UpdatedUserId = form.UserId
                     });
                 if (!LastName.Equals(form.LastName, StringComparison.InvariantCultureIgnoreCase))
                     AuditLogsToAdd.Add(new UserAuditLog
                     {
                         DateEntered = DateTime.Now,
-                        EditedByUserId = form.CurrentUserId,
-                        EventLogInformation = "Updated Last Name from:" + LastName + " to " + form.LastName + " for User: " + UserName,
-                        UserId = form.UserId
+                        EditedByUser = form.CurrentUser,
+                        EventLogInformation =
+                            "Updated Last Name from:" + LastName + " to " + form.LastName + " for User: " + UserName//,
+  //                      UpdatedUserId = form.UserId
                     });
 
                 if (!UserName.Equals(form.UserName, StringComparison.InvariantCultureIgnoreCase))
                     AuditLogsToAdd.Add(new UserAuditLog
                     {
                         DateEntered = DateTime.Now,
-                        EditedByUserId = form.CurrentUserId,
-                        EventLogInformation = "Updated User Name from:" + UserName + " to " + form.UserName + " for User: " + form.UserName,
-                        UserId = form.UserId
-
+                        EditedByUser = form.CurrentUser,
+                        EventLogInformation =
+                            "Updated User Name from:" + UserName + " to " + form.UserName + " for User: " +
+                            form.UserName//,
+//                        UpdatedUserId = form.UserId
                     });
                 if (!Email.Equals(form.Email, StringComparison.InvariantCultureIgnoreCase))
                     AuditLogsToAdd.Add(new UserAuditLog
                     {
                         DateEntered = DateTime.Now,
-                        EditedByUserId = form.CurrentUserId,
-                        EventLogInformation = "Updated Email from:" + Email + " to " + form.Email + " for User: " + UserName,
-                        UserId = form.UserId
+                        EditedByUser = form.CurrentUser,
+                        EventLogInformation =
+                            "Updated Email from:" + Email + " to " + form.Email + " for User: " + UserName//,
+//                        UpdatedUserId = form.UserId
                     });
             }
 
@@ -126,11 +127,10 @@ namespace LoggingAPI.Models
                         AuditLogsToAdd.Add(new UserAuditLog
                         {
                             DateEntered = DateTime.Now,
-                            EditedByUserId = form.CurrentUserId,
-                            EventLogInformation = "Deleted Permission:" + permission.Name + " for User: " + UserName,
-                            UserId = form.UserId
+                            EditedByUser = form.CurrentUser,
+                            EventLogInformation = "Deleted Permission:" + permission.Name + " for User: " + UserName//,
+                            //UpdatedUserId = form.UserId
                         });
-
                     }
                     else
                     {
@@ -149,16 +149,19 @@ namespace LoggingAPI.Models
                 var result = userManager.AddToRole(Id, permission.Name);
                 if (result.Succeeded)
                 {
-                    // Add log here.
+                    AuditLogsToAdd.Add(new UserAuditLog
+                    {
+                        DateEntered = DateTime.Now,
+                        EditedByUser = form.CurrentUser,
+                        EventLogInformation = "Added Permission:" + permission.Name + " for User: " + UserName//,
+                        //UpdatedUserId = form.UserId
+                    });
                 }
                 else
                 {
                     throw new ApplicationException("Failed to add user to role");
                 }
             }
-
-
         }
-
     }
 }

@@ -206,6 +206,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603231857572_Initial.cs" />
+    <Compile Include="Migrations\201603231857572_Initial.Designer.cs">
+      <DependentUpon>201603231857572_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -218,7 +222,6 @@
     <Compile Include="Models\Forms\ChangePasswordForm.cs" />
     <Compile Include="Models\Forms\RegisterForm.cs" />
     <Compile Include="Models\Forms\UserForm.cs" />
-    <Compile Include="Models\Interfaces\IEntity.cs" />
     <Compile Include="Models\Interfaces\IForm.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\User.cs" />
@@ -301,6 +304,11 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201603231857572_Initial.resx">
+      <DependentUpon>201603231857572_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

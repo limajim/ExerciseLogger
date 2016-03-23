@@ -90,7 +90,8 @@ namespace LoggingAPI
                     .GetUserManager<JJUserManager>();
             var permissionManager =
                 HttpContext.Current.GetOwinContext().Get<PermissionManager>();
-            const string name = "admin@example.com";
+            const string name = "jvandick";
+            const string email = "jvandick@cscos.com";
             const string password = "Admin@123456";
             const string permissionName = "IsSuperUser";
 
@@ -105,7 +106,7 @@ namespace LoggingAPI
             var user = userManager.FindByName(name);
             if (user == null)
             {
-                user = new User { UserName = name, Email = name };
+                user = new User { UserName = name, Email = email,FirstName = "Jim",LastName = "Van Dick"};
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
             }

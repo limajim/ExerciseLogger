@@ -29,7 +29,7 @@ namespace LoggingAPI.Models.Forms
         [Required]
         public string LastName { get; set; }
 
-        public string CurrentUserId { get; set; }
+        public User CurrentUser { get; set; }
 
         public byte[] RowVersion { get; set; }
 

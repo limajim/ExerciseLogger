@@ -1,9 +1,8 @@
-﻿using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Net.Mime;
+using System.Data.Entity.Migrations;
 using LoggingAPI.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using LoggingAPI;
 
 namespace LoggingAPI.Migrations
 {
@@ -38,23 +37,38 @@ namespace LoggingAPI.Migrations
 
             if (!permissionManager.RoleExists("CanCreateSessions"))
             {
-                permissionManager.Create(new Permission("CanCreateSessions") {Description = "The User Can Create a session."});
+                permissionManager.Create(new Permission("CanCreateSessions")
+                {
+                    Description = "The User Can Create a session."
+                });
             }
 
             if (!permissionManager.RoleExists("CanCreateExersizeTypes"))
             {
-                permissionManager.Create(new Permission("CanCreateExersizeTypes") { Description = "The User Can Create an exercise type." });
+                permissionManager.Create(new Permission("CanCreateExersizeTypes")
+                {
+                    Description = "The User Can Create an exercise type."
+                });
             }
 
             if (!permissionManager.RoleExists("CanEditExersizeTypes"))
             {
-                permissionManager.Create(new Permission("CanEditExersizeTypes") { Description = "The User Can Edit an exercise type." });
+                permissionManager.Create(new Permission("CanEditExersizeTypes")
+                {
+                    Description = "The User Can Edit an exercise type."
+                });
             }
 
             if (!permissionManager.RoleExists("CanDeleteExersizeTypes"))
             {
-                permissionManager.Create(new Permission("CanDeleteExersizeTypes") { Description = "The User Can Delete an exercise type." });
+                permissionManager.Create(new Permission("CanDeleteExersizeTypes")
+                {
+                    Description = "The User Can Delete an exercise type."
+                });
             }
+
+            var identityInitialization = new ApplicationDbInitializer();
+            identityInitialization.InitializeDatabase(context);
 
         }
     }

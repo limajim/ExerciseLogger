@@ -86,5 +86,11 @@ namespace LoggingAPI.Gateways
             return (_userManager.Delete(user));
         }
 
+
+        public List<UserAuditLog> GetUserAuditLogs(string userId)
+        {
+            return _dbContext.UserAuditLogs.Where( ual => ual.EditedByUserId == userId).ToList();
+        }
+
     }
 }

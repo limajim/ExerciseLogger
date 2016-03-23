@@ -15,5 +15,7 @@ namespace LoggingAPI.Gateways
         User GetUserByUserName(string userName);
         bool ChangePassword(ChangePasswordForm form);
 
+        List<UserAuditLog> GetUserAuditLogs(string userId);
+
     }
 }

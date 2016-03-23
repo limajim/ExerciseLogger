@@ -12,13 +12,15 @@ namespace LoggingAPI.Models
     {
         public int Id { get; set; }
         [Required]
-        [ForeignKey("User")]
-        public string EditedByUserId { get; set; }
-        [Required]
         public DateTime DateEntered { set; get; }
         [Required]
         public string EventLogInformation { get; set; }
 
-        public virtual User User { get; set; }
+
+
+
+        [ForeignKey("EditedByUser"), Column(Order = 2)]
+        public string EditedByUserId { get; set; }
+        public virtual User EditedByUser { get; set; }
     }
 }
