@@ -19,8 +19,10 @@ namespace LoggingAPI.Models
 
 
 
-        [ForeignKey("EditedByUser"), Column(Order = 2)]
         public string EditedByUserId { get; set; }
+        [ForeignKey("EditedByUserId")]
+        [InverseProperty("EditedByAuditLogs")]
         public virtual User EditedByUser { get; set; }
+
     }
 }

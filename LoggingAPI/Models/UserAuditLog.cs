@@ -4,9 +4,10 @@ namespace LoggingAPI.Models
 {
     public class UserAuditLog : AuditLog
     {
-        [ForeignKey("UpdatedUser"), Column(Order = 1)]
-        public string UpdatedUserId { get; set; }
-
+        public string UserIdUpdated { get; set; }
+        [ForeignKey("UserIdUpdated")]
+        [InverseProperty("UpdatedAuditLogs")]
         public virtual User UpdatedUser { get; set; }
+
     }
 }

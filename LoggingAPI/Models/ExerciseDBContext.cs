@@ -21,28 +21,6 @@ namespace LoggingAPI.Models
         {
             base.OnModelCreating(modelBuilder);
             Database.SetInitializer<ExerciseDbContext>(null);
-
-            //modelBuilder.Entity<User>()
-            //    .HasOptional(a => a.EditedByAuditLogs)
-            //    .WithOptionalDependent()
-            //    .WillCascadeOnDelete(true);
-
-            //modelBuilder.Entity<User>()
-            //    .HasOptional(a => a.EditedByAuditLogs)
-            //    .WithOptionalDependent()
-            //    .WillCascadeOnDelete(true);
-
-            //modelBuilder.Entity<UserAuditLog>()
-            //        .HasRequired(u => u.UpdatedUser)
-            //        .WithMany(u => u.UpdatedAuditLogs)
-            //        .HasForeignKey(u => u.UpdatedUserId)
-            //        .WillCascadeOnDelete(true);
-
-            modelBuilder.Entity<UserAuditLog>()
-                        .HasRequired(u => u.EditedByUser)
-                        .WithMany(u => u.EditedByAuditLogs)
-                        .HasForeignKey(u => u.EditedByUserId)
-                        .WillCascadeOnDelete(true);
         }
 
 
