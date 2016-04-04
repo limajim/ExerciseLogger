@@ -7,4 +7,4 @@
 Scenario: GetAuditLogsCreatedByUser
 	Given I have a User Id = "5cd6da42-a92a-4641-a427-a3e95fcb3683"
 	When I request Audit Logs edited by him/her
-	Then the result should return the User Audit Logs that were created for that user
+	Then the result should return the Audit Logs that were created for that user

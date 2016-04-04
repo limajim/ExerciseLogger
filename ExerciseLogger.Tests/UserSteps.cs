@@ -5,6 +5,7 @@ using LoggingAPI.Models;
 using LoggingAPI.Models.Forms;
 using Microsoft.AspNet.Identity;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
 
 namespace ExerciseLogger.Tests
@@ -12,6 +13,7 @@ namespace ExerciseLogger.Tests
     [Binding]
     public class UserSteps
     {
+        private const string EDITED_BY_USER_ID = "5cd6da42-a92a-4641-a427-a3e95fcb3683";
 
         //private string _userName;
         //private string _firstName;
@@ -24,11 +26,12 @@ namespace ExerciseLogger.Tests
 //        private RegisterForm _registerForm;
 
         private User _user;
+        private UserForm _userForm;
 
 
         private User deleteAndRegisterUser()
         {
-            var user = _gateway.GetUserByUserName(_user.UserName);
+            var user = _gateway.GetUserByUserName(_userForm.UserName);
 
             var userName = _user.UserName;
             var firstName = _user.FirstName;
@@ -45,7 +48,7 @@ namespace ExerciseLogger.Tests
             var result = _gateway.AddUser(new RegisterForm
             {
                 // jvandick user for testing purposes
-                CurrentUser = _gateway.GetUserById("5cd6da42-a92a-4641-a427-a3e95fcb3683"),
+                CurrentUser = _gateway.GetUserById(EDITED_BY_USER_ID),
                 Email = email,
                 FirstName = firstName,
                 LastName = lastName,
@@ -73,17 +76,66 @@ namespace ExerciseLogger.Tests
             _password = password;
             _confirmedPassword = confirmedPassword;
 
-            _user = new User { Email = emailAddress, FirstName = firstName, LastName = lastName, UserName = userName };
+            _userForm = new UserForm
+            {
+                Email = emailAddress,
+                FirstName = firstName,
+                LastName = lastName,
+                UserName = userName
+            };
 
             _gateway = new ExerciseLoggerGateway();
         }
-        
+
+        [Given(@"the user is enabled")]
+        public void GivenTheUserIsEnabled()
+        {
+            // Get the user
+            _user = _gateway.GetUserByUserName(_userForm.UserName);
+            if (_user == null)
+            {
+                // Recreate it
+                WhenIRequestTheSingleSignOnToRegister();
+                _user = _gateway.GetUserByUserName(_userForm.UserName);
+            }
+
+
+            if (!_user.IsEnabled)
+            {
+                var userForm = _user.ToForm();
+                userForm.CurrentUser = _gateway.GetUserById(EDITED_BY_USER_ID);
+                userForm.IsEnabled = true;
+                _user = _gateway.UpdateUser(userForm);
+            }
+        }
+
+        [Given(@"the user is disabled")]
+        public void GivenTheUserIsDisabled()
+        {
+            _user = _gateway.GetUserByUserName(_userForm.UserName);
+            if (_user == null)
+            {
+                // Recreate it
+                WhenIRequestTheSingleSignOnToRegister();
+                _user = _gateway.GetUserByUserName(_userForm.UserName);
+            }
+
+            if (_user.IsEnabled)
+            {
+                var userForm = _user.ToForm();
+                userForm.CurrentUser = _gateway.GetUserById(EDITED_BY_USER_ID);
+                userForm.IsEnabled = false;
+                _user = _gateway.UpdateUser(userForm);
+            }
+        }
+
+
         [When(@"I request the Single Sign On to register")]
         public void WhenIRequestTheSingleSignOnToRegister()
         {
             // See if the user exists
-            var user = _gateway.GetUserByUserName(_user.UserName);
-            if (user != null)
+            _user = _gateway.GetUserByUserName(_userForm.UserName);
+            if (_user != null)
             {
                 // Delete it because we want to test to make sure we can register
                 WhenIRequestToDeleteTheUserEntity();
@@ -92,11 +144,11 @@ namespace ExerciseLogger.Tests
             var registerForm = new RegisterForm
             {
                 // jvandick user for testing purposes
-                CurrentUser = _gateway.GetUserById("5cd6da42-a92a-4641-a427-a3e95fcb3683"),
-                Email = _user.Email,
-                UserName = _user.UserName,
-                FirstName = _user.FirstName,
-                LastName = _user.LastName,
+                CurrentUser = _gateway.GetUserById(EDITED_BY_USER_ID),
+                Email = _userForm.Email,
+                UserName = _userForm.UserName,
+                FirstName = _userForm.FirstName,
+                LastName = _userForm.LastName,
                 Password = _password,
                 ConfirmPassword = _confirmedPassword
             };
@@ -107,11 +159,54 @@ namespace ExerciseLogger.Tests
         [When(@"I request to delete the User entity")]
         public void WhenIRequestToDeleteTheUserEntity()
         {
-            var user = _gateway.GetUserByUserName(_user.UserName);
-            if (user == null)
-                user = deleteAndRegisterUser();
+            _user = _gateway.GetUserByUserName(_userForm.UserName);
+            if (_user == null)
+                _user = deleteAndRegisterUser();
 
-            _result = _gateway.DeleteUser(user);
+            _result = _gateway.DeleteUser(_user);
+        }
+
+
+        [When(@"I Request Audit Logs Associated To The User")]
+        public void WhenIRequestAuditLogsAssociatedToTheUser()
+        {
+            _user = _gateway.GetUserByUserName(_userForm.UserName);
+            if (_user == null)
+                _user = deleteAndRegisterUser();
+
+        }
+
+
+        [When(@"I request to disable the User")]
+        public void WhenIRequestToDisableTheUser()
+        {
+            var userForm = _user.ToForm();
+            userForm.CurrentUser = _gateway.GetUserById(EDITED_BY_USER_ID);
+            userForm.IsEnabled = false;
+            _gateway.UpdateUser(userForm);
+        }
+
+        [When(@"I request to enable User")]
+        public void WhenIRequestToEnableUser()
+        {
+            var userForm = _user.ToForm();
+            userForm.CurrentUser = _gateway.GetUserById(EDITED_BY_USER_ID);
+            userForm.IsEnabled = true;
+            _gateway.UpdateUser(userForm);
+        }
+
+
+        [Then(@"the result should be a disabled User")]
+        public void ThenTheResultShouldBeADisabledUser()
+        {
+            Assert.IsFalse(_user.IsEnabled);
+        }
+
+
+        [Then(@"the result should be an enabled User")]
+        public void ThenTheResultShouldBeAnEnabledUser()
+        {
+            Assert.IsTrue(_user.IsEnabled);
         }
 
 
@@ -121,10 +216,20 @@ namespace ExerciseLogger.Tests
             // Send out the errors if the result didnt succeed
             var errMsg = _result.Errors.Aggregate("", (current, error) => current + (error + ".  "));
 
-            var user = _gateway.GetUserById("5cd6da42-a92a-4641-a427-a3e95fcb3683");
+            var user = _gateway.GetUserById(EDITED_BY_USER_ID);
 
             Assert.IsTrue(_result.Succeeded,
                 "The IdentityResult should be Succeeded=true error( " + errMsg + " )");
         }
+
+        [Then(@"the result should be a list of Audit Logs")]
+        public void ThenTheResultShouldBeAListOfAuditLogs()
+        {
+            Assert.IsTrue(_user.UpdatedAuditLogs.TrueForAll(au => au.UpdatedUser.Id == _user.Id));
+        }
+
+
+
+
     }
 }

@@ -1,29 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using LoggingAPI.Models.Forms;
+using LoggingAPI.Models.Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LoggingAPI.Models
 {
-    public class User : IdentityUser
+    public class User : IdentityUser, IModel<UserForm>
     {
         public User()
         {
+            IsEnabled = true;
             AuditLogsToAdd = new List<UserAuditLog>();
         }
-
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
+        // DefaultValue does not do anything - it needs to be set in the constructor or you need to override the SQL generator for the specific generator you are using.
+        [Required]
+        [DefaultValue(true)]
+        public bool IsEnabled { get; set; }
+
+        public string Test { get; set; }
 
         public List<UserAuditLog> AuditLogsToAdd { get; set; }
 
-        public virtual IList<UserAuditLog> UpdatedAuditLogs { get; set; }
+        public virtual List<UserAuditLog> UpdatedAuditLogs { get; set; }
 
-        public virtual IList<UserAuditLog> EditedByAuditLogs { get; set; }
+        public virtual List<UserAuditLog> EditedByAuditLogs { get; set; }
+
 
         public string FullName
         {
@@ -104,8 +116,18 @@ namespace LoggingAPI.Models
                             "Updated Email from:" + Email + " to " + form.Email + " for User: " + UserName,
                         UpdatedUser = this
                     });
+                if (!IsEnabled.Equals(form.IsEnabled))
+                    AuditLogsToAdd.Add(new UserAuditLog
+                    {
+                        DateEntered = DateTime.Now,
+                        EditedByUser = form.CurrentUser,
+                        EventLogInformation = (form.IsEnabled?"Enabled ":"Disabled ") + UserName,
+                        UpdatedUser = this
+                    });
+
             }
 
+            IsEnabled = form.IsEnabled;
             FirstName = form.FirstName;
             LastName = form.LastName;
             UserName = form.UserName;
@@ -162,6 +184,25 @@ namespace LoggingAPI.Models
                     throw new ApplicationException("Failed to add user to role");
                 }
             }
+        }
+
+        /// <summary>
+        /// TODO:  May need to add permissions here. 
+        /// </summary>
+        /// <returns></returns>
+        public UserForm ToForm()
+        {
+            return
+                (new UserForm
+                {
+                    Email = Email,
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    UserId = Id,
+                    UserName = UserName,
+                    IsEnabled = IsEnabled
+                });
+
         }
     }
 }

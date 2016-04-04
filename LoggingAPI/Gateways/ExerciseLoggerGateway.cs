@@ -43,7 +43,9 @@ namespace LoggingAPI.Gateways
         }
         public User UpdateUser(UserForm form)
         {
-            throw new NotImplementedException();
+            var user = GetUserById(form.UserId);
+            user.UpdateUser(form, _userManager, _permissionManager);
+            return (user);
         }
 
         public IdentityResult AddUser(RegisterForm form)
@@ -54,11 +56,6 @@ namespace LoggingAPI.Gateways
             _dbContext.AuditLogs.AddRange(user.AuditLogsToAdd);
             _dbContext.SaveChanges();
             return result;
-        }
-
-        public bool DisableUser(string userName)
-        {
-            throw new NotImplementedException();
         }
 
         public List<User> GetUsers(string queryString)
@@ -90,16 +87,23 @@ namespace LoggingAPI.Gateways
             return (_userManager.Delete(user));
         }
 
+        #region Audit Logs stuff
 
-        public List<UserAuditLog> GetUserAuditLogs(string userId)
+        /// <summary>
+        /// TODO:  Need to figure out how to handle all types of audit logs for a user - so we can display everything a user has done
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<AuditLog> GetUserEditedByAuditLogs(string userId)
         {
-            return _dbContext.UserAuditLogs.Where( ual => ual.EditedByUserId == userId).ToList();
+            return _dbContext.AuditLogs.Where( ual => ual.EditedByUserId == userId).ToList();
         }
 
-        public void deleteAuditLogsByUserId(string userId)
+        public List<UserAuditLog> GetAuditLogsForUser(string userId)
         {
-            
-
+            return _dbContext.UserAuditLogs.Where(ual => ual.UserIdUpdated == userId).ToList();
         }
+
+        #endregion
     }
 }

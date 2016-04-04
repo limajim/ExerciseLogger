@@ -13,6 +13,7 @@ namespace ExerciseLogger.Tests
     {
         private string _userId;
         private ExerciseLoggerGateway _gateway;
+        private List<AuditLog> _editedBAuditLogs;
         private List<UserAuditLog> _userAuditLogs;
 
         [Given(@"I have a User Id = ""(.*)""")]
@@ -26,14 +27,17 @@ namespace ExerciseLogger.Tests
         [When(@"I request Audit Logs edited by him/her")]
         public void WhenIRequestAuditLogsEditedByHimHer()
         {
-            _userAuditLogs = _gateway.GetUserAuditLogs(_userId);
+            _editedBAuditLogs = _gateway.GetUserEditedByAuditLogs(_userId);
         }
-        
-        [Then(@"the result should return the User Audit Logs that were created for that user")]
-        public void ThenTheResultShouldReturnTheUserAuditLogsThatWereCreatedForThatUser()
+
+
+        [Then(@"the result should return the Audit Logs that were created for that user")]
+        public void ThenTheResultShouldReturnTheAuditLogsThatWereCreatedForThatUser()
         {
-            Assert.IsTrue(_userAuditLogs.TrueForAll(au => au.EditedByUserId == _userId));
+            Assert.IsTrue(_editedBAuditLogs.TrueForAll(au => au.EditedByUserId == _userId));
         }
+
+
 
     }
 }
