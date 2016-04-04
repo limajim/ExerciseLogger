@@ -83,6 +83,10 @@ namespace LoggingAPI.Gateways
 
         public IdentityResult DeleteUser(User user)
         {
+            // deleting audit logs.  
+            _dbContext.AuditLogs.RemoveRange(user.EditedByAuditLogs);
+            _dbContext.AuditLogs.RemoveRange(user.UpdatedAuditLogs);
+            
             return (_userManager.Delete(user));
         }
 
@@ -92,5 +96,10 @@ namespace LoggingAPI.Gateways
             return _dbContext.UserAuditLogs.Where( ual => ual.EditedByUserId == userId).ToList();
         }
 
+        public void deleteAuditLogsByUserId(string userId)
+        {
+            
+
+        }
     }
 }
