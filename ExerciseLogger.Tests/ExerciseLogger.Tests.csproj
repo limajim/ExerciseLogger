@@ -111,6 +111,10 @@
     </None>
     <None Include="packages.config" />
     <None Include="runtests.cmd" />
+    <Content Include="ConnectionStrings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="SpecRunTestProfile.xsd">
       <SubType>Designer</SubType>
     </None>
