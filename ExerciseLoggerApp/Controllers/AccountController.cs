@@ -9,12 +9,15 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ExerciseLoggerApp.Models;
+using System.Net;
+
 
 namespace ExerciseLoggerApp.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private string _loggingApiUrlBase = "http://localhost/webapi/api/LoggingAPI/";
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -151,6 +154,11 @@ namespace ExerciseLoggerApp.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                var client = new WebClient();
+
+                //client.
+
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

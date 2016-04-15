@@ -8,14 +8,15 @@ using LoggingAPI.Models;
 using LoggingAPI.Models.Forms;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using LoggingAPI.Models.ViewModels;
 
 namespace LoggingAPI.Gateways
 {
     public class ExerciseLoggerGateway : IExerciseLoggerGateway
     {
-        private readonly ExerciseDbContext _dbContext;
-        private readonly JJUserManager _userManager;
-        private readonly PermissionManager _permissionManager;
+        private ExerciseDbContext _dbContext;
+        private JJUserManager _userManager;
+        private PermissionManager _permissionManager;
 
         public ExerciseLoggerGateway()
         {
@@ -58,9 +59,11 @@ namespace LoggingAPI.Gateways
             return result;
         }
 
-        public List<User> GetUsers(string queryString)
+        public List<UserViewModel> GetUsers()
         {
-            throw new NotImplementedException();
+            var query = (from usr in _dbContext.Users
+                         select new UserViewModel {Email=usr.Email,FirstName=usr.FirstName,LastName=usr.LastName,UserName=usr.UserName, IsEnabled = usr.IsEnabled});
+            return (query.ToList());
         }
 
         public User GetUserById(string id)
@@ -105,5 +108,20 @@ namespace LoggingAPI.Gateways
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            if(_userManager != null)
+            {
+                _userManager.Dispose();
+                _userManager = null;
+            }
+
+            if(_dbContext != null )
+            {
+                _dbContext.Dispose();
+                _dbContext = null;
+            }
+        }
     }
 }

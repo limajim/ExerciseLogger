@@ -3,14 +3,16 @@ using System.Web.UI.WebControls;
 using LoggingAPI.Models;
 using LoggingAPI.Models.Forms;
 using Microsoft.AspNet.Identity;
+using System;
+using LoggingAPI.Models.ViewModels;
 
 namespace LoggingAPI.Gateways
 {
-    public interface IExerciseLoggerGateway
+    public interface IExerciseLoggerGateway : IDisposable
     {
         User UpdateUser(UserForm form);
         IdentityResult AddUser(RegisterForm form);
-        List<User> GetUsers(string queryString);
+        List<UserViewModel> GetUsers();
         User GetUserById(string id);
         User GetUserByUserName(string userName);
         bool ChangePassword(ChangePasswordForm form);

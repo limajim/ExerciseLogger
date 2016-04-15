@@ -16,6 +16,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+using LoggingAPI.Models.ViewModels;
 
 namespace LoggingAPI.Controllers
 {
@@ -25,17 +26,21 @@ namespace LoggingAPI.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private JJUserManager _userManager;
+        private ExerciseLoggerGateway _gateway;
 
         public AccountController()
         {
+            _gateway = new ExerciseLoggerGateway();
         }
+
 
         // TODO:  Wont need these.  Will be done in the gateway
         public AccountController(JJUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat) : this()
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+
         }
 
         public JJUserManager UserManager
@@ -48,6 +53,7 @@ namespace LoggingAPI.Controllers
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [AllowAnonymous]
         [Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
         {
@@ -60,6 +66,16 @@ namespace LoggingAPI.Controllers
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
         }
+
+        // GET api/Account/UserInfo
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [AllowAnonymous]
+        [Route("UserList")]
+        public List<UserViewModel> GetUsers()
+        {
+            return (_gateway.GetUsers());
+        }
+
 
         // POST api/Account/Logout
         [Route("Logout")]

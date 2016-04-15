@@ -14,6 +14,8 @@ namespace LoggingAPI.Models.ViewModels
 
         public string LastName { get; set; }
 
+        public bool IsEnabled { get; set; }
+
         public List<Permission> Permissions { get; set; }
     }
 }
