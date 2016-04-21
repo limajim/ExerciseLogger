@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LoggingAPI.Models.ViewModels
+namespace LoggerLibrary.ViewModels
 {
     public class UserViewModel
     {
@@ -16,6 +16,6 @@ namespace LoggingAPI.Models.ViewModels
 
         public bool IsEnabled { get; set; }
 
-        public List<Permission> Permissions { get; set; }
+        public List<PermissionViewModel> Permissions { get; set; }
     }
 }

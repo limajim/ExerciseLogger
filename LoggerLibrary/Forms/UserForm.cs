@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using LoggingAPI.Models.Interfaces;
+using LoggerLibrary.Interfaces;
 
-namespace LoggingAPI.Models.Forms
+namespace LoggerLibrary.Forms
 {
     public class UserForm : IForm, IValidatableObject
     {
@@ -32,7 +32,7 @@ namespace LoggingAPI.Models.Forms
         [Required]
         public bool IsEnabled { get; set; }
 
-        public User CurrentUser { get; set; }
+        public UserForm CurrentUser { get; set; }
 
         public byte[] RowVersion { get; set; }
 

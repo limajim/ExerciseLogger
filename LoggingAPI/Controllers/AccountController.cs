@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using LoggingAPI.Gateways;
-using LoggingAPI.Models;
-using LoggingAPI.Models.Forms;
 using LoggingAPI.Providers;
 using LoggingAPI.Results;
 using Microsoft.AspNet.Identity;
@@ -16,7 +14,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using LoggingAPI.Models.ViewModels;
+using LoggerLibrary.ViewModels;
 
 namespace LoggingAPI.Controllers
 {

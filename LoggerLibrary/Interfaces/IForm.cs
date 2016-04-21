@@ -4,13 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
 using System.Web;
+using LoggerLibrary.Forms;
 
-namespace LoggingAPI.Models.Interfaces
+
+namespace LoggerLibrary.Interfaces
 {
     public interface IForm
     {
         [Required]
-        User CurrentUser { set; get; }
+        UserForm CurrentUser { set; get; }
         [Required]
         byte[] RowVersion { get; set; }
     }

@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
-using LoggingAPI.Models;
+using LoggerLibrary.Forms;
+using LoggerLibrary.ViewModels;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 

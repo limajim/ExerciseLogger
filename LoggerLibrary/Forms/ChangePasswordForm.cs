@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using LoggingAPI.Models.Interfaces;
+using LoggerLibrary.Interfaces;
 
-namespace LoggingAPI.Models.Forms
+namespace LoggerLibrary.Forms
 {
     public class ChangePasswordForm : IForm
     {
@@ -25,7 +25,7 @@ namespace LoggingAPI.Models.Forms
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public User CurrentUser { get; set; }
+        public UserForm CurrentUser { get; set; }
         public byte[] RowVersion { get; set; }
     }
 }

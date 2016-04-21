@@ -124,6 +124,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LoggerLibrary\LoggerLibrary.csproj">
+      <Project>{52e0be00-9532-4583-96d0-654652a83f20}</Project>
+      <Name>LoggerLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LoggingAPI\LoggingAPI.csproj">
       <Project>{E90C8D2E-A2AC-4275-91F3-4F7C897CE367}</Project>
       <Name>LoggingAPI</Name>

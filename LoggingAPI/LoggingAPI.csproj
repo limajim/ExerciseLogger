@@ -214,19 +214,13 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ExerciseSessionAuditLog.cs" />
-    <Compile Include="Models\Interfaces\IModel.cs" />
     <Compile Include="Models\UserAuditLog.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\ExerciseDbContext.cs" />
     <Compile Include="Models\ExerciseSession.cs" />
     <Compile Include="Models\ExerciseType.cs" />
-    <Compile Include="Models\Forms\ChangePasswordForm.cs" />
-    <Compile Include="Models\Forms\RegisterForm.cs" />
-    <Compile Include="Models\Forms\UserForm.cs" />
-    <Compile Include="Models\Interfaces\IForm.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Models\ViewModels\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -313,6 +307,12 @@
     <EmbeddedResource Include="Migrations\201603231857572_Initial.resx">
       <DependentUpon>201603231857572_Initial.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LoggerLibrary\LoggerLibrary.csproj">
+      <Project>{52e0be00-9532-4583-96d0-654652a83f20}</Project>
+      <Name>LoggerLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

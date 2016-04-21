@@ -5,7 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Web;
 
-namespace LoggingAPI.Models.Interfaces
+namespace LoggerLibrary.Interfaces
 {
     /// <summary>
     /// Use generic type to define the type of form that will be created.

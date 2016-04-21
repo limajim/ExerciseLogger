@@ -5,10 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using LoggingAPI.Models.Forms;
-using LoggingAPI.Models.Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using LoggerLibrary.Forms;
 
 namespace LoggingAPI.Models
 {

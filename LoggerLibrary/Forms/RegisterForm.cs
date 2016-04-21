@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using LoggingAPI.Models.Interfaces;
+using LoggerLibrary.Interfaces;
+using LoggerLibrary.Forms;
 
-namespace LoggingAPI.Models.Forms
+namespace LoggerLibrary.Forms
 {
     public class RegisterForm : IForm
     {
@@ -33,7 +34,7 @@ namespace LoggingAPI.Models.Forms
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public User CurrentUser { get; set; }
+        public UserForm CurrentUser { get; set; }
         public byte[] RowVersion { get; set; }
 
     }

@@ -8,7 +8,8 @@ using LoggingAPI.Models;
 using LoggingAPI.Models.Forms;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using LoggingAPI.Models.ViewModels;
+using LoggerLibrary.ViewModels;
+using LoggerLibrary.Forms;
 
 namespace LoggingAPI.Gateways
 {
@@ -42,7 +43,7 @@ namespace LoggingAPI.Gateways
 
 
         }
-        public User UpdateUser(UserForm form)
+        public UserViewModel UpdateUser(UserForm form)
         {
             var user = GetUserById(form.UserId);
             user.UpdateUser(form, _userManager, _permissionManager);
@@ -66,12 +67,12 @@ namespace LoggingAPI.Gateways
             return (query.ToList());
         }
 
-        public User GetUserById(string id)
+        public UserViewModel GetUserById(string id)
         {
             return _userManager.FindById(id);
         }
 
-        public User GetUserByUserName(string userName)
+        public UserViewModel GetUserByUserName(string userName)
         {
             return _userManager.FindByUserName(userName);
         }
