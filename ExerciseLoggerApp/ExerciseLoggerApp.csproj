@@ -257,6 +257,10 @@
       <Project>{52e0be00-9532-4583-96d0-654652a83f20}</Project>
       <Name>LoggerLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LoggingAPI\LoggingAPI.csproj">
+      <Project>{e90c8d2e-a2ac-4275-91f3-4f7c897ce367}</Project>
+      <Name>LoggingAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
