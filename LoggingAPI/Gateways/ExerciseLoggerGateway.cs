@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Linq;
-using System.Net.Mail;
-using System.Web.UI.WebControls;
 using LoggingAPI.Models;
-using LoggingAPI.Models.Forms;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using LoggerLibrary.ViewModels;
@@ -98,12 +94,12 @@ namespace LoggingAPI.Gateways
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<AuditLog> GetUserEditedByAuditLogs(string userId)
+        public List<AuditLogViewModel> GetUserEditedByAuditLogs(string userId)
         {
             return _dbContext.AuditLogs.Where( ual => ual.EditedByUserId == userId).ToList();
         }
 
-        public List<UserAuditLog> GetAuditLogsForUser(string userId)
+        public List<AuditLogViewModel> GetAuditLogsForUser(string userId)
         {
             return _dbContext.UserAuditLogs.Where(ual => ual.UserIdUpdated == userId).ToList();
         }

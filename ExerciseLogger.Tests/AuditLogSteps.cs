@@ -14,7 +14,7 @@ namespace ExerciseLogger.Tests
     {
         private string _userId;
         private ExerciseLoggerGateway _gateway;
-        private List<AuditLog> _editedBAuditLogs;
+        private List<AuditLogViewModel> _editedBAuditLogs;
         private List<UserAuditLog> _userAuditLogs;
 
         [Given(@"I have a User Id = ""(.*)""")]

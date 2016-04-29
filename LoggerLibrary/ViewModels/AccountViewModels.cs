@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LoggingAPI.Models
+namespace LoggerLibrary.ViewModels
 {
     // Models returned by AccountController actions.
 

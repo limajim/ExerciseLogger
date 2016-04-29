@@ -3,6 +3,8 @@ using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using System;
 using LoggerLibrary.ViewModels;
+using LoggingAPI.Models;
+using LoggerLibrary.Forms;
 
 namespace LoggingAPI.Gateways
 {

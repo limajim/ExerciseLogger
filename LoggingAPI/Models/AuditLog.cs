@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoggerLibrary.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,13 +19,11 @@ namespace LoggingAPI.Models
         [Required]
         public string EventLogInformation { get; set; }
 
-
-
-
         public string EditedByUserId { get; set; }
+
         [ForeignKey("EditedByUserId")]
         [InverseProperty("EditedByAuditLogs")]
-        public virtual User EditedByUser { get; set; }
+        public virtual UserForm EditedByUser { get; set; }
 
     }
 }
