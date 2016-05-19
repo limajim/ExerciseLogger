@@ -9,6 +9,8 @@ namespace LoggerLibrary.ViewModels
 
         public string EditedBy { get; set; }
 
+        public string EditedByUserId { get; set; }
+
         public string LogInfomormation { get; set; }
     }
 }

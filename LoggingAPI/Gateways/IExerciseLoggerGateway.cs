@@ -10,7 +10,7 @@ namespace LoggingAPI.Gateways
 {
     public interface IExerciseLoggerGateway : IDisposable
     {
-        User UpdateUser(UserForm form);
+        UserViewModel UpdateUser(UserForm form);
         IdentityResult AddUser(RegisterForm form);
         List<UserViewModel> GetUsers();
         UserViewModel GetUserById(string id);
